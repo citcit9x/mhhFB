@@ -1,20 +1,51 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNTAgMjUwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNTAgMjUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojREQwMDMxO30NCgkuc3Qxe2ZpbGw6I0MzMDAyRjt9DQoJLnN0MntmaWxsOiNGRkZGRkY7fQ0KPC9zdHlsZT4NCjxnPg0KCTxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iMTI1LDMwIDEyNSwzMCAxMjUsMzAgMzEuOSw2My4yIDQ2LjEsMTg2LjMgMTI1LDIzMCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAJIi8+DQoJPHBvbHlnb24gY2xhc3M9InN0MSIgcG9pbnRzPSIxMjUsMzAgMTI1LDUyLjIgMTI1LDUyLjEgMTI1LDE1My40IDEyNSwxNTMuNCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAxMjUsMzAgCSIvPg0KCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMjUsNTIuMUw2Ni44LDE4Mi42aDBoMjEuN2gwbDExLjctMjkuMmg0OS40bDExLjcsMjkuMmgwaDIxLjdoMEwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMQ0KCQlMMTI1LDUyLjF6IE0xNDIsMTM1LjRIMTA4bDE3LTQwLjlMMTQyLDEzNS40eiIvPg0KPC9nPg0KPC9zdmc+DQo=">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="http://angularjs.blogspot.ca/">Angular blog</a></h2>
-  </li>
-</ul>
+<h1>FriendList Facebook by Cit</h1>
+<div class="w3-container">
 
+    <label>Input ID Facebook: </label>
+    <input class="w3-input w3-border w3-light-grey" type="text" placeholder="ID Facebook" [(ngModel)]='id_fb'>
+
+    <label>Input access token: </label>
+    <input class="w3-input w3-border w3-light-grey" type="text" placeholder="Access token" [(ngModel)]='token_fb'>
+
+    <button class=" w3-ripple w3-blue-grey" (click)='getFL()'>GETLIST</button>
+</div>
+<div class="w3-container w3-table w3-striped" *ngIf='obj'>
+    <h2 *ngIf='check2'>List Friends</h2>
+    <h2 *ngIf='check1'>Charts</h2>
+    <div>
+        <label class="w3-green">Do you want export XLS file? Now</label>
+        <button class=" w3-ripple w3-blue-grey" (click)="exportToExcel()">Export</button>
+        <label class="w3-blue">Do you want show chart? Now</label>
+        <button class=" w3-ripple w3-blue-grey" (click)='status1()' *ngIf='check2'>Show</button>
+        <button class=" w3-ripple w3-blue-grey" (click)='status2()' *ngIf='check1'>Hide</button>
+    </div>
+    <br>
+    <table class="w3-table" *ngIf='check2'>
+        <tr class="w3-red">
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Avatar</th>
+        </tr>
+        <tr *ngFor="let x of obj; let i = index">
+            <th>{{i+1}}</th>
+            <th>{{x.name}}</th>
+            <th>
+                <img src="{{x.picture.data.url}}" alt='Error'>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div style="display: block; width: 30%;height: 30%;" *ngIf='check1' id="charts">
+    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+    <div style="float: left; clear: left;">
+        <table class="w3-table">
+            <tr>
+                <th class="w3-red" *ngFor="let label of pieChartLabels">{{label}}</th>
+            </tr>
+            <tr>
+                <th *ngFor='let d of pieChartData'>{{d}}</th>
+            </tr>
+        </table>
+    </div>
+</div>
